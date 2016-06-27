@@ -1,0 +1,26 @@
+web:
+    image: nginx
+    ports:
+        - "8080:80"
+    volumes:
+        - ./docker/conf/nginx:/etc/nginx/conf.d
+        - ./src:/srv/www
+    links:
+        - php
+
+php:
+    image: lchski/php:7-fpm-extended
+    volumes:
+        - ./src:/srv/www
+    links:
+        - db
+
+db:
+    image: mariadb
+    volumes:
+        - ./docker/data/db:/var/lib/mysql
+    environment:
+        - MYSQL_ROOT_PASSWORD=root
+        - MYSQL_DATABASE=dockerdev
+        - MYSQL_USER=dockerdevuser
+        - MYSQL_PASSWORD=password
